@@ -2,35 +2,34 @@
 
 // Crear Elementos
 const crearElemento = (elemento) => document.createElement(elemento);
-// console.log(crearElemento("input"));
+
+// Crear btn
+const crearBtn = (elemento, tipo, valor, id) => {
+  let btn = document.createElement(elemento);
+  btn.type = tipo;
+  btn.value = valor;
+  btn.id = id;
+  return btn;
+};
+
+// Obtener Elementos
+const obtenerElemento = (elemento) => document.getElementById(elemento);
+
+//<----  ---->
+
+// <---- Varibales ---->
 
 // Bienvenida
 let nombreJugador;
-let div;
-const bienvenidoJugador = () => {
-  // div.innerHTML = ``
-  nombreJugador = nombreInput.value;
-  div.innerHTML = `<h1>Bienvenido ${nombreJugador}</h1>`;
-};
-
-let contenedor = document.getElementById("contenedor");
+let contenedor = obtenerElemento("contenedor");
+let divPrincipal = crearElemento("div");
 let nombreInput = crearElemento("input");
-let btnEnviar = crearElemento("input");
-btnEnviar.type = "button";
-btnEnviar.value = "Enviar";
-btnEnviar.addEventListener("click", bienvenidoJugador);
+let btnEnviar = crearBtn("input", "submit", "Enviar", "btnBienvenida");
 
-const inicio = () => {
-  div = crearElemento("div");
-  div.innerHTML = `<h1>hola</h1> <p>Por favor indica tu nombre</p>`;
-  contenedor.appendChild(div);
-  div.appendChild(nombreInput);
-  div.appendChild(btnEnviar);
-};
+//Nuevo juego
+let contenedorMenu = obtenerElemento("selectContainer");
 
-inicio();
-
-// Crear select en menu de peticiones
+// Crear menu de peticiones
 let dificultad = [
   ["Fácil", "easy"],
   ["Intermedio", "medium"],
@@ -66,23 +65,64 @@ let categoria = [
   ["Entretenimiento: Anime y manga Japones", 31],
   ["Entretenimiento: Caricaturas y Animaciones", 32],
 ];
-let contenedorMenu = document.getElementById("selectContainer");
-let select = crearElemento("select");
-select.id="trivaForm"
+let btnFormulario = crearBtn("input", "submit", "Enviar", "btnFormulario");
 
-const crearOpciones = (lista) => {
+// <---- Obtener valores de formulario ---->
+const obtenerValores = () => {
+  let dificultadValue = obtenerElemento("triviaForm-dificultad").value;
+  let tipoValue = obtenerElemento("triviaForm-tipo").value;
+  let categoriaValue = obtenerElemento("triviaForm-categoria").value;
+  console.log(dificultadValue, tipoValue, categoriaValue);
+};
 
+// <---- Crear menu de peticiones ---->
+
+const crearOpciones = (lista, id) => {
+  let select = crearElemento("select");
   contenedorMenu.appendChild(select);
 
   for (let i = 0; i < lista.length; i++) {
-    console.log(lista[i]);
+    select.id = `triviaForm-${id}`;
     let opcion = crearElemento("option");
     opcion.text = lista[i][0];
     opcion.value = lista[i][1];
     select.appendChild(opcion);
   }
+  contenedorMenu.appendChild(btnFormulario);
+  btnFormulario.addEventListener("click", obtenerValores);
 };
 
-crearOpciones(dificultad);
-crearOpciones(tipo);
-crearOpciones(categoria);
+// <---- Nuevo Juego ---->
+
+const nuevoJuego = () => {
+  bienvenidoJugador();
+  console.log("hola", nombreJugador);
+  contenedorMenu.innerHTML = `
+      <h1>Hola ${nombreJugador}</h1>
+      <h2>Selecciona las siguientes opciones para empezar un juego nuevo</h2>`;
+  crearOpciones(dificultad, "dificultad");
+  crearOpciones(tipo, "tipo");
+  crearOpciones(categoria, "categoria");
+};
+
+// <---- Bienvenida ---->
+
+const bienvenidoJugador = () => {
+  nombreJugador = nombreInput.value;
+  if (nombreJugador.length === 0) {
+    divPrincipal.innerHTML = `<p>Por favor escribe un nombre</p>`;
+  }
+};
+
+btnEnviar.addEventListener("click", nuevoJuego);
+contenedor.appendChild(divPrincipal);
+
+// Inicio de Juego
+
+const inicio = () => {
+  divPrincipal.innerHTML = `<h1>hola</h1> <p>Por favor indica tu nombre</p>`;
+  divPrincipal.appendChild(nombreInput);
+  divPrincipal.appendChild(btnEnviar);
+};
+
+inicio();
