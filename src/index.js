@@ -1,4 +1,5 @@
 // import "./styles/style.scss";
+import Peticion from "./Peticion";
 
 // Crear Elementos
 const crearElemento = (elemento) => document.createElement(elemento);
@@ -72,7 +73,9 @@ const obtenerValores = () => {
   let dificultadValue = obtenerElemento("triviaForm-dificultad").value;
   let tipoValue = obtenerElemento("triviaForm-tipo").value;
   let categoriaValue = obtenerElemento("triviaForm-categoria").value;
-  console.log(dificultadValue, tipoValue, categoriaValue);
+  let pet = new Peticion(categoriaValue, dificultadValue, tipoValue);
+  let hacerPet = pet.hacerPeticion();
+  // return hacerPet;
 };
 
 // <---- Crear menu de peticiones ---->
