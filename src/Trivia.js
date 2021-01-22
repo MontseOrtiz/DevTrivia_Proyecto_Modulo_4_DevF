@@ -1,4 +1,3 @@
-// let urlBase = "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple"
 import axios from "axios";
 
 // Crear Elementos
@@ -29,7 +28,9 @@ let divRespuestas;
 let divRespuestasArray;
 let ronda = 0;
 let score = 0;
+let puntos = 100;
 let preguntas;
+let respuestaCorrecta;
 let respuestas;
 let respuestasMezcladas;
 
@@ -77,7 +78,7 @@ class Trivia {
   mostrarPregunta(index) {
     ronda++;
     let pregunta = preguntas[index].question;
-    let respuestaCorrecta = preguntas[index].correct_answer;
+    respuestaCorrecta = preguntas[index].correct_answer;
     let respuestasIncorrectas = preguntas[index].incorrect_answers;
     let prefix_respuesta = ["A", "B", "C", "D", "E"];
     this.obtenerRespuestas(respuestaCorrecta, respuestasIncorrectas);
@@ -86,29 +87,22 @@ class Trivia {
     this.mezclarRespuestas(respuestasMezcladas);
 
     let crearHtmlRespuestasArray = respuestasMezcladas.map(
-      (actualRes) => ` <div class="respuesta-contenedor">
-        <p>${prefix_respuesta[respuestasMezcladas.indexOf(actualRes)]}</p>
-        <p>${actualRes}</p>
+      (actualRes) => ` <div class="respuesta-contenedor" id = "${actualRes}">
+        <p id = "${actualRes}">${
+        prefix_respuesta[respuestasMezcladas.indexOf(actualRes)]
+      }</p>
+        <p id = "${actualRes}">${actualRes}</p>
       </div>`
     );
 
     let crearHtmlRespuestas = crearHtmlRespuestasArray.join(" ");
 
-    contenedorPregunta.innerHTML = pregunta;
+    contenedorPregunta.innerHTML = `<h2>${index + 1} ${pregunta}</h2>`;
     contenedorRespuesta.innerHTML = crearHtmlRespuestas;
+    console.log("mostrando respuesta correcta", respuestaCorrecta);
+    console.log("object score  actual", score);
 
-    // divRespuestas = document.getElementsByClassName("respuesta-contenedor");
-    divRespuestas = document.querySelectorAll("div.respuesta-contenedor");
-    // console.log("div respuestas ya llego ", divRespuestas);
-    // console.log("div respuestas ya llego length ", divRespuestas.length);
-
-    // for (let i = 0; i < divRespuestas.length; i++) {
-    //   const element = divRespuestas[i];
-    //   console.log("espero que si funciones ", element);
-    // }
-    // divRespuestas.forEach((element) => {
-    //   console.log("espero que si mmmmfunciones ", element);
-    // });
+    // divRespuestas = document.querySelectorAll("div.respuesta-contenedor");
 
     this.agregarEvento();
   }
@@ -130,11 +124,22 @@ class Trivia {
   }
 
   agregarEvento() {
+    divRespuestas = document.querySelectorAll("div.respuesta-contenedor");
     divRespuestas.forEach((divRes) => {
       divRes.addEventListener("click", (e) => {
-        console.log("ronda por el agregar envento", ronda);
-        this.mostrarPregunta(ronda);
-        console.log("mostrando el evento", e);
+        let elementoSelect = e.target.id;
+
+        console.log("object elemto seleccionado", elementoSelect);
+        console.log("mostrando respuesta correcta", respuestaCorrecta);
+        if (elementoSelect === respuestaCorrecta) {
+          alert("bien hecho");
+          score = score + 100;
+          console.log("object score ", score);
+          this.mostrarPregunta(ronda);
+        } else {
+          alert("lo siento sigue participando");
+          this.mostrarPregunta(ronda);
+        }
       });
     });
   }
