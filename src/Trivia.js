@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as archivo from "./index";
 
 // Crear Elementos
 const crearElemento = (elemento) => document.createElement(elemento);
@@ -23,7 +24,12 @@ let contenedorPregunta = crearElemento("h2");
 contenedorPreguntas.appendChild(contenedorPregunta);
 let contenedorRespuesta = crearElemento("div");
 contenedorPreguntas.appendChild(contenedorRespuesta);
-let btnNext = crearBtn("input", "submit", "Siguiente Pregunta", "Siguiente");
+let btnNuevoJuego = crearBtn(
+  "input",
+  "submit",
+  "Quieres juegar de Nuevo",
+  "nuevo juego"
+);
 let divRespuestas;
 let divRespuestasArray;
 let ronda = 0;
@@ -72,10 +78,20 @@ class Trivia {
     score = 0;
     ronda = 0;
     console.log("pasando preguntas a juego nuevo", preguntas);
+    console.log("ronda ----->", ronda);
+    contenedorPrincipal.style.display = "block";
     this.mostrarPregunta(ronda);
   }
 
   mostrarPregunta(index) {
+    console.log("soy el index", index);
+    console.log("soy la ronda ", ronda);
+    // let nuevaFuncion = ;
+    if (index === 10) {
+      console.log(score);
+      contenedorPrincipal.style.display = "none";
+      return archivo.final(score);
+    }
     ronda++;
     let pregunta = preguntas[index].question;
     respuestaCorrecta = preguntas[index].correct_answer;
@@ -132,12 +148,12 @@ class Trivia {
         console.log("object elemto seleccionado", elementoSelect);
         console.log("mostrando respuesta correcta", respuestaCorrecta);
         if (elementoSelect === respuestaCorrecta) {
-          alert("bien hecho");
+          // alert("bien hecho");
           score = score + 100;
           console.log("object score ", score);
           this.mostrarPregunta(ronda);
         } else {
-          alert("lo siento sigue participando");
+          // alert("lo siento sigue participando");
           this.mostrarPregunta(ronda);
         }
       });

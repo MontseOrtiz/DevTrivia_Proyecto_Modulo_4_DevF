@@ -67,12 +67,19 @@ let categoria = [
   ["Entretenimiento: Caricaturas y Animaciones", 32],
 ];
 let btnFormulario = crearBtn("input", "submit", "Enviar", "btnFormulario");
+let btnNuevoJuego = crearBtn(
+  "input",
+  "submit",
+  "Quieres juegar de Nuevo",
+  "nuevo juego"
+);
 
 // <---- Obtener valores de formulario ---->
 const obtenerValores = () => {
   let dificultadValue = obtenerElemento("triviaForm-dificultad").value;
   let tipoValue = obtenerElemento("triviaForm-tipo").value;
   let categoriaValue = obtenerElemento("triviaForm-categoria").value;
+  contenedorMenu.innerHTML = ` `;
   let pet = new Trivia(categoriaValue, dificultadValue, tipoValue);
   pet.hacerPeticion();
 };
@@ -96,7 +103,8 @@ const crearOpciones = (lista, id) => {
 
 // <---- Nuevo Juego ---->
 
-const nuevoJuego = () => {
+export const nuevoJuego1 = () => {
+  divPrincipal.innerHTML = ` `;
   bienvenidoJugador();
   console.log("hola", nombreJugador);
   contenedorMenu.innerHTML = `
@@ -116,7 +124,7 @@ const bienvenidoJugador = () => {
   }
 };
 
-btnEnviar.addEventListener("click", nuevoJuego);
+btnEnviar.addEventListener("click", nuevoJuego1);
 contenedor.appendChild(divPrincipal);
 
 // Inicio de Juego
@@ -127,4 +135,20 @@ const inicio = () => {
   divPrincipal.appendChild(btnEnviar);
 };
 
+export const final = (score) => {
+  console.log("tu score final es", score);
+
+  // console.log("quesque la funcion", nuevaFuncion);
+  // divPrincipal.appendChild(btnNuevoJuego);
+  let tuScore = crearElemento("p");
+  tuScore.innerHTML = `<h2>Tu score es de ${score}</h2> `;
+  divPrincipal.appendChild(tuScore);
+  divPrincipal.appendChild(btnNuevoJuego);
+  // divPrincipal.innerHTML = `<h2>Tu score es de ${score}</h2> ${btnNuevoJuego}`;
+
+  btnNuevoJuego.addEventListener("click", inicio);
+};
+
 inicio();
+
+// nuevoJuego1();
