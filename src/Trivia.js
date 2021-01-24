@@ -17,6 +17,8 @@ const crearBtn = (elemento, tipo, valor, id) => {
 const obtenerElemento = (elemento) => document.getElementById(elemento);
 
 // <---- Varibales ---->
+let contenedor = obtenerElemento("container");
+let divPrincipal = obtenerElemento("container-bienvenida");
 let contenedorPrincipal = obtenerElemento("questionContainer");
 let contenedorPreguntas = crearElemento("div");
 contenedorPrincipal.appendChild(contenedorPreguntas);

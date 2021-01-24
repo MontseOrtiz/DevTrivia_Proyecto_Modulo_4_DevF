@@ -1,4 +1,4 @@
-// import "./styles/style.scss";
+import "./styles/style.scss";
 import Trivia from "./Trivia";
 
 // Crear Elementos
@@ -16,19 +16,21 @@ const crearBtn = (elemento, tipo, valor, id) => {
 // Obtener Elementos
 const obtenerElemento = (elemento) => document.getElementById(elemento);
 
-//<----  ---->
-
 // <---- Varibales ---->
 
 // Bienvenida
 let nombreJugador;
-let contenedor = obtenerElemento("contenedor");
-let divPrincipal = crearElemento("div");
+let contenedor = obtenerElemento("container");
+let divPrincipal = obtenerElemento("container-bienvenida");
+// divPrincipal.className = "container-bienvenida";
 let nombreInput = crearElemento("input");
+nombreInput.className = "input-nombre";
+
 let btnEnviar = crearBtn("input", "submit", "Enviar", "btnBienvenida");
+btnEnviar.className = "button";
 
 //Nuevo juego
-let contenedorMenu = obtenerElemento("selectContainer");
+// let contenedorMenu = obtenerElemento("selectContainer");
 
 // Crear menu de peticiones
 let dificultad = [
@@ -79,7 +81,7 @@ const obtenerValores = () => {
   let dificultadValue = obtenerElemento("triviaForm-dificultad").value;
   let tipoValue = obtenerElemento("triviaForm-tipo").value;
   let categoriaValue = obtenerElemento("triviaForm-categoria").value;
-  contenedorMenu.innerHTML = ` `;
+  // contenedorMenu.innerHTML = ` `;
   let pet = new Trivia(categoriaValue, dificultadValue, tipoValue);
   pet.hacerPeticion();
 };
@@ -88,7 +90,7 @@ const obtenerValores = () => {
 
 const crearOpciones = (lista, id) => {
   let select = crearElemento("select");
-  contenedorMenu.appendChild(select);
+  divPrincipal.appendChild(select);
 
   for (let i = 0; i < lista.length; i++) {
     select.id = `triviaForm-${id}`;
@@ -97,40 +99,50 @@ const crearOpciones = (lista, id) => {
     opcion.value = lista[i][1];
     select.appendChild(opcion);
   }
-  contenedorMenu.appendChild(btnFormulario);
+  divPrincipal.appendChild(btnFormulario);
   btnFormulario.addEventListener("click", obtenerValores);
 };
 
 // <---- Nuevo Juego ---->
 
 export const nuevoJuego1 = () => {
-  divPrincipal.innerHTML = ` `;
-  bienvenidoJugador();
+  nombreJugador = nombreInput.value;
+  if (nombreJugador.length === 0) {
+    bienvenidoJugador();
+  } else {
+    divPrincipal.innerHTML = `
+    <h1>Hola ${nombreJugador}</h1>
+    <h2>Selecciona las siguientes opciones para empezar a jugar</h2>`;
+    crearOpciones(dificultad, "dificultad");
+    crearOpciones(tipo, "tipo");
+    crearOpciones(categoria, "categoria");
+  }
+  // bienvenidoJugador();
   console.log("hola", nombreJugador);
-  contenedorMenu.innerHTML = `
-      <h1>Hola ${nombreJugador}</h1>
-      <h2>Selecciona las siguientes opciones para empezar un juego nuevo</h2>`;
-  crearOpciones(dificultad, "dificultad");
-  crearOpciones(tipo, "tipo");
-  crearOpciones(categoria, "categoria");
 };
 
 // <---- Bienvenida ---->
 
 const bienvenidoJugador = () => {
-  nombreJugador = nombreInput.value;
+  // nombreJugador = nombreInput.value;
+  // console.log(nombreJugador.length);
+  let btnRegresar = crearBtn("input", "submit", "Regresar", "btn-regresar");
+  btnRegresar.addEventListener("click", inicio);
+  btnRegresar.className = "button";
   if (nombreJugador.length === 0) {
-    divPrincipal.innerHTML = `<p>Por favor escribe un nombre</p>`;
+    console.log("hoola");
+    divPrincipal.innerHTML = "<p>Por favor escribe un nombre</p> ";
+    divPrincipal.appendChild(btnRegresar);
   }
 };
 
 btnEnviar.addEventListener("click", nuevoJuego1);
-contenedor.appendChild(divPrincipal);
+// contenedor.appendChild(divPrincipal);
 
 // Inicio de Juego
 
 const inicio = () => {
-  divPrincipal.innerHTML = `<h1>hola</h1> <p>Por favor indica tu nombre</p>`;
+  divPrincipal.innerHTML = `<h1>Bienvenido</h1>  <p>Por favor indica tu nombre</p>`;
   divPrincipal.appendChild(nombreInput);
   divPrincipal.appendChild(btnEnviar);
 };
@@ -146,7 +158,7 @@ export const final = (score) => {
   divPrincipal.appendChild(btnNuevoJuego);
   // divPrincipal.innerHTML = `<h2>Tu score es de ${score}</h2> ${btnNuevoJuego}`;
 
-  btnNuevoJuego.addEventListener("click", inicio);
+  btnNuevoJuego.addEventListener("click", nuevoJuego1);
 };
 
 inicio();

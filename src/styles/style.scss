@@ -1,3 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Nova+Square&display=swap');
+
+$font-stack:'Nova Square', cursive;
+$black: #000000;
+$cultured: #e9ecefff;
+$baby-blue-eyes: #a2d2ffff;
+$uranian-blue: #bde0feff;
+$uranian-blue-2: #a4d5ff;
+$nadeshiko-pink: #ffafccff;
+$orchid-pink: #ffc8ddff;
+$pink-lavender: #e0b4e6ff;
+$pink-lavender-2: #e2bae6ff;
+$light-coral: #f69897ff;
+$light-pink: #ffadadff;
+$tea-green: #caffbfff;
+
+
+%flex-column{
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+%flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+%justify-center {
+    justify-content: center;
+}
+
+%estilo-h1 {
+    font-size: calc(4em + 1vw);
+}
+
+
+%estilo-p  {
+    font-size: calc(1.2em + 1vw);
+}
+
+
+
+
 body{
-    background-color: aqua;
+    font-family: $font-stack;
+    font-size: 62.5%;
+    background-color: $black;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    
+}
+
+h1{
+    @extend %estilo-h1
+}
+
+p{
+    @extend %estilo-p
+}
+
+
+
+.container{
+    @extend %flex-column;
+    @extend %flex-center;
+    width: 100vw;
+    height: 100vh;
+    // max-width: 80rem;
+   
+}
+
+.container-bienvenida{
+    @extend %flex-column;
+    @extend %flex-center;
+    background-color: $orchid-pink;
+    width: 80%;
+    height: 50%;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.button{
+    font-family: $font-stack;
+    font-size: 1.5rem;
+    padding: .5rem 0;
+    width: 10rem;
+    text-align: center;
+    margin: 1rem 0 1rem 0;
+    text-decoration: none;
+    color: rgb(28, 26, 26);
+    // background-color: $pink-lavender;
+    background: linear-gradient(90deg, $baby-blue-eyes 20%, $uranian-blue 100%);
+    border-radius: 4px;
+}
+
+.button:hover {
+    cursor: pointer;
+    box-shadow: 0 0.4rem 1.4rem 0 $uranian-blue-2;
+    transition: transform 150ms;
+    transform: scale(1.03);
+}
+
+.button[disabled]:hover {
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+.input-nombre{
+    @extend %estilo-p;
+    margin-bottom: 1rem;
+    min-width: 8rem;
+    width: 20%;
+    padding: .2rem;
+    border: none;
+    box-shadow: 0 0.1rem 1.4rem 0 rgba(86, 185, 235, 0.5);
 }
