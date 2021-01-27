@@ -22,15 +22,12 @@ const obtenerElemento = (elemento) => document.getElementById(elemento);
 let nombreJugador;
 let contenedor = obtenerElemento("container");
 let divPrincipal = obtenerElemento("container-bienvenida");
-// divPrincipal.className = "container-bienvenida";
+let contenedorPrincipal = obtenerElemento("questionContainer");
+let contenedorSinOpciones = obtenerElemento("container-sin-opciones");
 let nombreInput = crearElemento("input");
 nombreInput.className = "input-nombre";
-
 let btnEnviar = crearBtn("input", "submit", "Enviar", "btnBienvenida");
 btnEnviar.className = "button";
-
-//Nuevo juego
-// let contenedorMenu = obtenerElemento("selectContainer");
 
 // Crear menu de peticiones
 let dificultad = [
@@ -68,29 +65,36 @@ let categoria = [
   ["Entretenimiento: Anime y manga Japones", 31],
   ["Entretenimiento: Caricaturas y Animaciones", 32],
 ];
+let divSelect = crearElemento("div");
+divSelect.className = "container-select-trivia";
+// divPrincipal.appendChild(divSelect);
 let btnFormulario = crearBtn("input", "submit", "Enviar", "btnFormulario");
+btnFormulario.className = "button";
 let btnNuevoJuego = crearBtn(
   "input",
   "submit",
   "Quieres juegar de Nuevo",
   "nuevo juego"
 );
+btnNuevoJuego.className = "button";
 
 // <---- Obtener valores de formulario ---->
 const obtenerValores = () => {
   let dificultadValue = obtenerElemento("triviaForm-dificultad").value;
   let tipoValue = obtenerElemento("triviaForm-tipo").value;
   let categoriaValue = obtenerElemento("triviaForm-categoria").value;
-  // contenedorMenu.innerHTML = ` `;
   let pet = new Trivia(categoriaValue, dificultadValue, tipoValue);
   pet.hacerPeticion();
 };
 
 // <---- Crear menu de peticiones ---->
 
+// divSelect.appendChild(select);
+
 const crearOpciones = (lista, id) => {
+  divPrincipal.appendChild(divSelect);
   let select = crearElemento("select");
-  divPrincipal.appendChild(select);
+  divSelect.appendChild(select);
 
   for (let i = 0; i < lista.length; i++) {
     select.id = `triviaForm-${id}`;
@@ -110,22 +114,27 @@ export const nuevoJuego1 = () => {
   if (nombreJugador.length === 0) {
     bienvenidoJugador();
   } else {
+    divPrincipal.style.display = "flex";
+    contenedorSinOpciones.style.display = "none";
+    contenedorPrincipal.style.display = "none";
+
+    divSelect.innerHTML = " ";
+
+    // let divSelect = crearElemento("div");
+    // divSelect.className = "hola";
     divPrincipal.innerHTML = `
     <h1>Hola ${nombreJugador}</h1>
-    <h2>Selecciona las siguientes opciones para empezar a jugar</h2>`;
+    <p>Selecciona las siguientes opciones para empezar a jugar</p>`;
     crearOpciones(dificultad, "dificultad");
     crearOpciones(tipo, "tipo");
     crearOpciones(categoria, "categoria");
   }
-  // bienvenidoJugador();
   console.log("hola", nombreJugador);
 };
 
 // <---- Bienvenida ---->
 
 const bienvenidoJugador = () => {
-  // nombreJugador = nombreInput.value;
-  // console.log(nombreJugador.length);
   let btnRegresar = crearBtn("input", "submit", "Regresar", "btn-regresar");
   btnRegresar.addEventListener("click", inicio);
   btnRegresar.className = "button";
@@ -137,11 +146,14 @@ const bienvenidoJugador = () => {
 };
 
 btnEnviar.addEventListener("click", nuevoJuego1);
-// contenedor.appendChild(divPrincipal);
 
 // Inicio de Juego
 
 const inicio = () => {
+  contenedorPrincipal.style.display = "none";
+  contenedorSinOpciones.style.display = "none";
+  // contenedor.removeChild(contenedorPrincipal);
+  nombreInput.placeholder = "Nombre";
   divPrincipal.innerHTML = `<h1>Bienvenido</h1>  <p>Por favor indica tu nombre</p>`;
   divPrincipal.appendChild(nombreInput);
   divPrincipal.appendChild(btnEnviar);
@@ -149,14 +161,12 @@ const inicio = () => {
 
 export const final = (score) => {
   console.log("tu score final es", score);
-
-  // console.log("quesque la funcion", nuevaFuncion);
-  // divPrincipal.appendChild(btnNuevoJuego);
+  divPrincipal.innerHTML = " ";
+  divPrincipal.style.display = "flex";
   let tuScore = crearElemento("p");
   tuScore.innerHTML = `<h2>Tu score es de ${score}</h2> `;
   divPrincipal.appendChild(tuScore);
   divPrincipal.appendChild(btnNuevoJuego);
-  // divPrincipal.innerHTML = `<h2>Tu score es de ${score}</h2> ${btnNuevoJuego}`;
 
   btnNuevoJuego.addEventListener("click", nuevoJuego1);
 };

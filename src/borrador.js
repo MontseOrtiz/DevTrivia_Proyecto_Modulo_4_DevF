@@ -1,5 +1,5 @@
-// import "./styles/style.scss";
-import Trivia from "./Trivia";
+import axios from "axios";
+import * as archivo from "./index";
 
 // Crear Elementos
 const crearElemento = (elemento) => document.createElement(elemento);
@@ -16,117 +16,188 @@ const crearBtn = (elemento, tipo, valor, id) => {
 // Obtener Elementos
 const obtenerElemento = (elemento) => document.getElementById(elemento);
 
-//<----  ---->
-
 // <---- Varibales ---->
+let contenedor = obtenerElemento("container");
+let divPrincipal = obtenerElemento("container-bienvenida");
+let contenedorSinOpciones = crearElemento("div");
+contenedor.appendChild(contenedorSinOpciones);
+contenedorSinOpciones.className = "container-sin-opciones";
+contenedorSinOpciones.id = "container-sin-opciones";
+let contenedorPrincipal = obtenerElemento("questionContainer");
+contenedor.appendChild(contenedorPrincipal);
+contenedorPrincipal.className = "container-trivia";
+let contenedorPreguntas = crearElemento("div");
+contenedorPrincipal.appendChild(contenedorPreguntas);
+let contenedorPregunta = crearElemento("h2");
+contenedorPreguntas.appendChild(contenedorPregunta);
+let contenedorRespuesta = crearElemento("div");
+contenedorPreguntas.appendChild(contenedorRespuesta);
+let btnNuevoJuego = crearBtn(
+  "input",
+  "submit",
+  "Quieres juegar de Nuevo",
+  "nuevo juego"
+);
+btnNuevoJuego.className = "button";
+let btnRegresarMenuOpciones = crearBtn(
+  "input",
+  "submit",
+  "Regresar",
+  "Regresar a menu opciones"
+);
+btnRegresarMenuOpciones.className = "button";
 
-// Bienvenida
-let nombreJugador;
-let contenedor = obtenerElemento("contenedor");
-let divPrincipal = crearElemento("div");
-let nombreInput = crearElemento("input");
-let btnEnviar = crearBtn("input", "submit", "Enviar", "btnBienvenida");
+let divRespuestas;
+let divRespuestasArray;
+let ronda = 0;
+let score = 0;
+let puntos = 100;
+let preguntas;
+let respuestaCorrecta;
+let respuestas;
+let respuestasMezcladas;
 
-//Nuevo juego
-let contenedorMenu = obtenerElemento("selectContainer");
-
-// Crear menu de peticiones
-let dificultad = [
-  ["Fácil", "easy"],
-  ["Intermedio", "medium"],
-  ["Dificil", "hard"],
-];
-let tipo = [
-  ["Opción múltiple", "multiple"],
-  ["Verdadero o falso", "boolean"],
-];
-let categoria = [
-  ["Conocimiento General", 9],
-  ["Entretenimiento: Libros", 10],
-  ["Entretenimiento: Peliculas", 11],
-  ["Entretenimiento: Música", 12],
-  ["Entretenimiento: Musicales y Teatros", 13],
-  ["Entretenimiento: Televisión", 14],
-  ["Entretenimiento: Video Juegos", 15],
-  ["Entretenimiento: Juegos de Mesa", 16],
-  ["Ciencia y Naturaleza", 17],
-  ["Ciencia: Computadoras", 18],
-  ["Ciencia: Matemáticas", 19],
-  ["Mitología", 20],
-  ["Deportes", 21],
-  ["Geografía", 22],
-  ["Historia", 23],
-  ["Política", 24],
-  ["Arte", 25],
-  ["Celebridades", 26],
-  ["Animales", 27],
-  ["Automoviles", 28],
-  ["Entretenimiento: Comics", 29],
-  ["Ciencia: Gadgets", 30],
-  ["Entretenimiento: Anime y manga Japones", 31],
-  ["Entretenimiento: Caricaturas y Animaciones", 32],
-];
-let btnFormulario = crearBtn("input", "submit", "Enviar", "btnFormulario");
-
-// <---- Obtener valores de formulario ---->
-const obtenerValores = () => {
-  let dificultadValue = obtenerElemento("triviaForm-dificultad").value;
-  let tipoValue = obtenerElemento("triviaForm-tipo").value;
-  let categoriaValue = obtenerElemento("triviaForm-categoria").value;
-  let pet = new Trivia(categoriaValue, dificultadValue, tipoValue);
-  pet.hacerPeticion();
-};
-
-// <---- Crear menu de peticiones ---->
-
-const crearOpciones = (lista, id) => {
-  let select = crearElemento("select");
-  contenedorMenu.appendChild(select);
-
-  for (let i = 0; i < lista.length; i++) {
-    select.id = `triviaForm-${id}`;
-    let opcion = crearElemento("option");
-    opcion.text = lista[i][0];
-    opcion.value = lista[i][1];
-    select.appendChild(opcion);
+class Trivia {
+  constructor(categoria, dificultad, tipo) {
+    this.urlBase = "https://opentdb.com/api.php?amount=10";
+    (this.categoria = categoria),
+      (this.dificultad = dificultad),
+      (this.tipo = tipo);
+    // this.preguntas;
+    // this.ronda = 0;
   }
-  contenedorMenu.appendChild(btnFormulario);
-  btnFormulario.addEventListener("click", obtenerValores);
-};
 
-// <---- Nuevo Juego ---->
+  hacerPeticion() {
+    let url = `${this.urlBase}&category=${this.categoria}&difficulty=${this.dificultad}&type=${this.tipo}`;
+    console.log(url);
+    axios
+      .get(url)
+      .then((res) => {
+        let resCode = res.data.response_code;
+        let resData = res.data.results;
 
-const nuevoJuego = () => {
-  bienvenidoJugador();
-  console.log("hola", nombreJugador);
-  contenedorMenu.innerHTML = `
-      <h1>Hola ${nombreJugador}</h1>
-      <h2>Selecciona las siguientes opciones para empezar un juego nuevo</h2>`;
-  crearOpciones(dificultad, "dificultad");
-  crearOpciones(tipo, "tipo");
-  crearOpciones(categoria, "categoria");
-};
+        if (resCode != 0) {
+          // debugger;
+          contenedorSinOpciones.style.display = "flex";
+          console.log("hey hey hey hey no hay opciones para jugar");
 
-// <---- Bienvenida ---->
+          // contenedorPrincipal.style.display = "none";
+          console.log("holsdnasjflksjflkasdjfñalsdkjflkasdjflkajsdlñfk");
+          contenedorSinOpciones.innerHTML = `<p>Lo sentimos no contamos con suficientes preguntas</p><br> <p>Por favor elige otras opciones</p>`;
+          contenedorSinOpciones.appendChild(btnRegresarMenuOpciones);
+          btnRegresarMenuOpciones.addEventListener(
+            "click",
+            archivo.nuevoJuego1
+          );
+          contenedorPrincipal.style.display = "none";
+        }
 
-const bienvenidoJugador = () => {
-  nombreJugador = nombreInput.value;
-  if (nombreJugador.length === 0) {
-    divPrincipal.innerHTML = `<p>Por favor escribe un nombre</p>`;
+        // console.log(resData, resCode);
+        preguntas = resData;
+        // console.log("preguntas", preguntas);
+        // console.log("ronda acutual", ronda);
+
+        // this.mostrarPregunta(this.ronda);
+        // contenedorPrincipal.innerHTML = "hola";
+        contenedorPrincipal.style.display = "flex";
+        this.nuevoJuego();
+      })
+      .catch((err) => console.log(err));
   }
-};
 
-btnEnviar.addEventListener("click", nuevoJuego);
-contenedor.appendChild(divPrincipal);
+  nuevoJuego() {
+    score = 0;
+    ronda = 0;
+    console.log("pasando preguntas a juego nuevo", preguntas);
+    console.log("ronda ----->", ronda);
+    // contenedorPrincipal.style.display = "block";
+    this.mostrarPregunta(ronda);
+  }
 
-// Inicio de Juego
+  mostrarPregunta(index) {
+    console.log("entrando ---salkasldkaslkdalsk");
+    console.log("que hay aqui", contenedorPrincipal.innerHTML);
+    console.log("soy el index", index);
+    console.log("soy la ronda ", ronda);
+    // let nuevaFuncion = ;
+    if (index === 10) {
+      console.log(score);
+      contenedorPrincipal.style.display = "none";
+      return archivo.final(score);
+    }
+    console.log("soy un contenedor", contenedor);
+    divPrincipal.style.display = "none";
+    // contenedorSinOpciones.style.display = "none";
+    // contenedorPrincipal.style.display = "flex";
+    // contenedorPrincipal.innerHTML = " ";
+    // contenedor.removeChild(divPrincipal);
+    ronda++;
+    let pregunta = preguntas[index].question;
+    respuestaCorrecta = preguntas[index].correct_answer;
+    let respuestasIncorrectas = preguntas[index].incorrect_answers;
+    let prefix_respuesta = ["A", "B", "C", "D", "E"];
+    this.obtenerRespuestas(respuestaCorrecta, respuestasIncorrectas);
 
-const inicio = () => {
-  divPrincipal.innerHTML = `<h1>hola</h1> <p>Por favor indica tu nombre</p>`;
-  divPrincipal.appendChild(nombreInput);
-  divPrincipal.appendChild(btnEnviar);
-};
+    respuestasMezcladas = Array.from(respuestas);
+    this.mezclarRespuestas(respuestasMezcladas);
 
-// inicio();
+    let crearHtmlRespuestasArray = respuestasMezcladas.map(
+      (actualRes) => ` <div class="respuesta-contenedor" id = "${actualRes}">
+        <p id = "${actualRes}">${
+        prefix_respuesta[respuestasMezcladas.indexOf(actualRes)]
+      }</p>
+        <p id = "${actualRes}">${actualRes}</p>
+      </div>`
+    );
 
-nuevoJuego();
+    let crearHtmlRespuestas = crearHtmlRespuestasArray.join(" ");
+
+    contenedorPregunta.innerHTML = `<h2>${index + 1} ${pregunta}</h2>`;
+    contenedorRespuesta.innerHTML = crearHtmlRespuestas;
+    console.log("mostrando respuesta correcta", respuestaCorrecta);
+    console.log("object score  actual", score);
+
+    // divRespuestas = document.querySelectorAll("div.respuesta-contenedor");
+
+    this.agregarEvento();
+  }
+
+  obtenerRespuestas(opc1, opc2) {
+    respuestas = [opc1];
+    opc2.forEach((element) => {
+      respuestas.push(element);
+    });
+  }
+
+  mezclarRespuestas(arrayRespuestas) {
+    for (let i = arrayRespuestas.length - 1; i > 0; i--) {
+      let indiceAleatorio = Math.floor(Math.random() * (i + 1));
+      let temporal = arrayRespuestas[i];
+      arrayRespuestas[i] = arrayRespuestas[indiceAleatorio];
+      arrayRespuestas[indiceAleatorio] = temporal;
+    }
+  }
+
+  agregarEvento() {
+    divRespuestas = document.querySelectorAll("div.respuesta-contenedor");
+    divRespuestas.forEach((divRes) => {
+      divRes.addEventListener("click", (e) => {
+        let elementoSelect = e.target.id;
+
+        console.log("object elemto seleccionado", elementoSelect);
+        console.log("mostrando respuesta correcta", respuestaCorrecta);
+        if (elementoSelect === respuestaCorrecta) {
+          // alert("bien hecho");
+          score = score + 100;
+          console.log("object score ", score);
+          this.mostrarPregunta(ronda);
+        } else {
+          // alert("lo siento sigue participando");
+          this.mostrarPregunta(ronda);
+        }
+      });
+    });
+  }
+}
+
+export default Trivia;
