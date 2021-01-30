@@ -189,14 +189,18 @@ input::placeholder {
     @extend %flex-column;
     color: $white;
 
+    div{
+        width: 100%;
+    }
+
     h2{
         font-size: calc(1.5em + 1vw);
-        margin-bottom: 2rem
+        margin-bottom: 3rem
     }
 
     .respuesta-contenedor{
         @extend %flex-row;
-        margin-bottom: 0.8rem;
+        margin-bottom: 1.5rem;
         width: 100%;
         border-radius: 4px;
         /* background: #E0B4E6; */
@@ -237,6 +241,43 @@ input::placeholder {
         box-shadow:0px 0px 20px 6px #FF616B !important;
     }
     
+
+}
+
+//Barra Progreso
+
+.score-contenedor {
+   display: flex;
+   flex-flow: row nowrap;
+  justify-content: space-between;
+  
+  
+  p{
+    font-size: calc(18em + 1vw)
+  }
+
+  h1{
+    font-size: calc(35em + 1.2vw)
+  }
+
+  div:nth-child(2){
+    text-align: right;
+  }
+
+    #barra-contenedor{
+        width: 20rem;
+        height: 3rem;
+        border: 0.2rem solid white;
+        margin-top: 2rem;
+        border-radius: 50px;
+        overflow: hidden;
+    }
+
+    #barra-progreso{
+    
+        height: 4rem;
+        background: linear-gradient(90deg, rgba(255,249,182,1) 0%, rgba(217,252,133,1) 15%, rgba(133,252,194,1) 30%, rgba(133,252,244,1) 43%, rgba(133,206,252,1) 55%, rgba(162,133,252,1) 65%, rgba(222,133,252,1) 75%, rgba(252,133,188,1) 84%);
+    }
 
 }
 

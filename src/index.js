@@ -70,12 +70,7 @@ divSelect.className = "container-select-trivia";
 // divPrincipal.appendChild(divSelect);
 let btnFormulario = crearBtn("input", "submit", "Enviar", "btnFormulario");
 btnFormulario.className = "button";
-let btnNuevoJuego = crearBtn(
-  "input",
-  "submit",
-  "Quieres juegar de Nuevo",
-  "nuevo juego"
-);
+let btnNuevoJuego = crearBtn("input", "submit", "Nuevo Juego", "nuevo juego");
 btnNuevoJuego.className = "button";
 
 // <---- Obtener valores de formulario ---->

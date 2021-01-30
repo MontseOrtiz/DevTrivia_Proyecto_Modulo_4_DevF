@@ -26,6 +26,8 @@ contenedorSinOpciones.id = "container-sin-opciones";
 let contenedorPrincipal = obtenerElemento("questionContainer");
 contenedor.appendChild(contenedorPrincipal);
 contenedorPrincipal.className = "container-trivia";
+let contenedorScore = crearElemento("div");
+contenedorPrincipal.appendChild(contenedorScore);
 let contenedorPreguntas = crearElemento("div");
 contenedorPrincipal.appendChild(contenedorPreguntas);
 let contenedorPregunta = crearElemento("h2");
@@ -51,7 +53,9 @@ let divRespuestas;
 let divRespuestasArray;
 let ronda = 0;
 let score = 0;
-let puntos = 100;
+let numPregunta = 0;
+let maxPreguntas = 10;
+// let puntos = 100;
 let preguntas;
 let respuestaCorrecta;
 let respuestas;
@@ -95,31 +99,26 @@ class Trivia {
   }
 
   nuevoJuego() {
+    numPregunta = 0;
     score = 0;
     ronda = 0;
-    console.log("pasando preguntas a juego nuevo", preguntas);
-    console.log("ronda ----->", ronda);
-
     this.mostrarPregunta(ronda);
   }
 
   mostrarPregunta(index) {
-    console.log("entrando ---salkasldkaslkdalsk");
-    console.log("que hay aqui", contenedorPrincipal.innerHTML);
-    console.log("soy el index", index);
-    console.log("soy la ronda ", ronda);
     // let nuevaFuncion = ;
     if (index === 10) {
       console.log(score);
       contenedorPrincipal.style.display = "none";
       return archivo.final(score);
     }
-    console.log("soy un contenedor", contenedor);
+
     divPrincipal.style.display = "none";
     contenedorSinOpciones.style.display = "none";
     contenedorPrincipal.style.display = "flex";
 
     ronda++;
+    numPregunta++;
     let pregunta = preguntas[index].question;
     respuestaCorrecta = preguntas[index].correct_answer;
     let respuestasIncorrectas = preguntas[index].incorrect_answers;
@@ -130,7 +129,8 @@ class Trivia {
     this.mezclarRespuestas(respuestasMezcladas);
 
     let crearHtmlRespuestasArray = respuestasMezcladas.map(
-      (actualRes) => ` <div class="respuesta-contenedor" id = "${actualRes}">
+      (actualRes) => `
+       <div class="respuesta-contenedor" id = "${actualRes}">
         <p class="prefijo-respuesta" id = "${actualRes}">${
         prefix_respuesta[respuestasMezcladas.indexOf(actualRes)]
       }</p>
@@ -140,10 +140,27 @@ class Trivia {
 
     let crearHtmlRespuestas = crearHtmlRespuestasArray.join(" ");
 
+    contenedorScore.innerHTML = `<div class= score-contenedor> 
+    <div>
+      <p> Pregunta ${numPregunta} de ${maxPreguntas}</p>
+      <div id="barra-contenedor">
+          <div id="barra-progreso" ></div>
+      </div>
+    </div>
+
+    <div >
+    <p >Score</p>
+    <h1  id="score"> ${score}</h1>
+    </div>
+    </div>`;
+
+    let barraWidth = (numPregunta / maxPreguntas) * 100;
+    let barraProgreso = obtenerElemento("barra-progreso");
+    barraProgreso.style.width = `${barraWidth}%`;
+
     contenedorPregunta.innerHTML = `<h2>${index + 1} ${pregunta}</h2>`;
     contenedorRespuesta.innerHTML = crearHtmlRespuestas;
     console.log("mostrando respuesta correcta", respuestaCorrecta);
-    console.log("object score  actual", score);
 
     // divRespuestas = document.querySelectorAll("div.respuesta-contenedor");
     contenedorPrincipal.style.display = "flex";
@@ -171,34 +188,19 @@ class Trivia {
     divRespuestas.forEach((divRes) => {
       divRes.addEventListener("click", (e) => {
         let elementoSelect = e.target.id;
-        console.log("divres ----->>>>", divRes);
-
-        console.log("object elemto seleccionado", elementoSelect);
-        console.log("object eeee", e);
-        console.log("mostrando respuesta correcta", respuestaCorrecta);
         if (elementoSelect === respuestaCorrecta) {
-          // alert("bien hecho");
-          console.log("divres seleccionada ----->>>>", divRes);
           score = score + 100;
           divRes.classList.add("correct");
-          console.log("object score ", score);
           setTimeout(() => {
             divRes.classList.remove("incorrect");
-            console.log("divres seleccionadaksdjalskjda ----->>>>", divRes);
             this.mostrarPregunta(ronda);
           }, 1000);
         } else {
-          console.log(
-            "divres seleccionadalajdalñskfskjdaksjd ----->>>>",
-            divRes
-          );
           divRes.classList.add("incorrect");
-          // alert("lo siento sigue participando");
           setTimeout(() => {
             divRes.classList.remove("incorrect");
             this.mostrarPregunta(ronda);
           }, 1000);
-          // this.mostrarPregunta(ronda);
         }
       });
     });
