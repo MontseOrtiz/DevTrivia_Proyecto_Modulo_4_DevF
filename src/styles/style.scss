@@ -1,3 +1,348 @@
-body{
-    background-color: aqua;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nova+Square&display=swap');
+
+
+$font-stack:'Nova Square', cursive;
+$font-title:'Montserrat', sans-serif;
+$black: #000000;
+$cultured: #e9ecefff;
+$baby-blue-eyes: #a2d2ffff;
+$uranian-blue: #bde0feff;
+$uranian-blue-2: #a4d5ff;
+$nadeshiko-pink: #ffafccff;
+$orchid-pink: #ffc8ddff;
+$pink-lavender: #e0b4e6ff;
+$pink-lavender-2: #e2bae6ff;
+$purple: rgb(196, 30, 211);
+$light-coral: #f69897ff;
+$light-pink: #ffadadff;
+$tea-green: #caffbfff;
+$white:white;
+
+// colores que si utilizare
+$hot-pink:#f55891;
+$white:white;
+
+
+%flex-column{
+    display: flex;
+    flex-flow: column nowrap;
 }
+
+%flex-row {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+%flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+%justify-center {
+    justify-content: center;
+}
+
+%justify-space-evenly {
+    justify-content: space-around;
+}
+
+%estilo-h1 {
+    font-size: calc(11em + 2vw);
+}
+
+%estilo-h2 {
+    font-size: calc(1em + 1vw);
+}
+
+
+%estilo-p  {
+    font-size: calc(3em + 1vw);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-size: 62.5%;
+    font-family: 'Nova Square', cursive;
+}
+
+body{
+    background-color: $black;
+}
+
+h1{
+    @extend %estilo-h1;
+    margin-bottom: 5rem
+}
+
+h2{
+    @extend %estilo-h2;
+   
+}
+
+p{
+    @extend %estilo-p;
+    margin-bottom: 4rem
+}
+
+
+// titulo 
+$colors: $nadeshiko-pink, $baby-blue-eyes , $hot-pink, $pink-lavender-2 , $purple;
+$max: length($colors);
+$dash: 70; //tamaño de linea
+$dash-gap: 10; //espacio entre lineas
+$dash-space: $dash * ($max - 1) + $dash-gap * $max;
+$time: 6s;
+$time-step: $time/$max;
+
+.text {
+  fill: none;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-dasharray: $dash $dash-space;
+  stroke-dashoffset: 0;
+  -webkit-animation: stroke $time infinite linear;
+  animation: stroke $time infinite linear;
+  
+  @for $item from 1 through $max {
+    &:nth-child(#{$max}n + #{$item}) {
+      $color: nth($colors, $item);
+      stroke: $color;
+      -webkit-animation-delay: -($time-step * $item);
+      animation-delay: -($time-step * $item);
+    }
+  }
+}
+
+@-webkit-keyframes stroke {
+  100% {
+    stroke-dashoffset: -($dash + $dash-gap) * $max;
+  }
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: -($dash + $dash-gap) * $max;
+  }
+}
+
+
+.titulo-svg {
+  background-size: .2em 100%;
+
+  font-size:calc(50rem + 4vw) !important;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+//   height: 100%;
+}
+
+svg {
+  width: 100%;
+//   height: 100%;
+font-family: 'Montserrat', sans-serif!important;
+  font-size:calc(40rem + 4vw) !important;
+}
+
+
+.container{
+    @extend %flex-column;
+    @extend %flex-center;
+    width: 100vw;
+    height: 100vh;
+    // max-width: 80rem;
+   
+}
+
+.container-bienvenida, .container-trivia, .container-sin-opciones{
+    @extend %flex-column;
+    @extend %flex-center;
+    color: $white;
+    width: 80%;
+    height: 80%;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.button{
+    font-size: 2.4rem;
+    padding: 2rem 0;
+    width: 22%;
+    text-align: center;
+    margin:  1rem 0;
+    text-decoration: none;
+    color: $white;
+    background: $hot-pink;
+    border-radius: 4px;
+    border-color: $hot-pink;
+    outline: none;
+}
+
+
+.button:hover {
+    cursor: pointer;
+    box-shadow: 5px 5px 15px -1px #FF8080, -9px 5px 15px -1px #FFE488, -7px -5px 15px -1px #8CFF85, 12px -5px 15px 1px #80C7FF, 12px 10px 15px 2px #E488FF, -16px 10px 15px -1px #FF616B, -10px -7px 27px 1px #8E5CFF, 5px 5px 15px 5px rgba(0,0,0,0);
+    transition: transform 150ms;
+    transform: scale(1.05);
+}
+
+.button[disabled]:hover {
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+.input-nombre{
+    @extend %estilo-p;
+    margin-bottom: 2rem;
+    width: 22%;
+    padding: 1.5rem;
+    font-size: 1.8rem;
+    border: none;
+    box-shadow: 0 0.1rem 1.4rem 0 $white;
+    border-radius: 4px;
+    outline: none;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+
+// Menu opciones de trivia
+.container-select-trivia{
+    @extend %flex-row;
+    @extend %justify-space-evenly;
+    width: 80%;
+    margin-bottom: 4rem;
+
+    select {
+        // appearance: none;
+        cursor: pointer;
+        border-radius: .5rem;
+        color: black;
+        margin: 1rem ;
+        border: palegreen;
+        background-color: white;
+        font-size: calc(.6em + 1vw);
+        padding: 1.5rem;
+        outline:none;
+      
+    }
+    // select:hover {
+    //     // appearance: none;
+    //     border-radius: .5rem;
+    //     border: rgb(37, 25, 105);
+    // }
+
+    
+}
+
+
+// juego
+
+.container-trivia{
+    @extend %flex-column;
+    color: $white;
+
+    div{
+        width: 100%;
+    }
+
+    h2{
+        font-size: calc(1.5em + 1vw);
+        margin-bottom: 3rem
+    }
+
+    .respuesta-contenedor{
+        @extend %flex-row;
+        margin-bottom: 1.5rem;
+        width: 100%;
+        border-radius: 4px;
+        /* background: #E0B4E6; */
+        /* background: #c778ce; */
+        background: #FF5C98;
+       
+        // min-width: 80rem;
+
+        &:hover{
+            cursor: pointer;
+            box-shadow: 5px 5px 15px 5px #FF8080, -9px 5px 15px 5px #FFE488, -7px -5px 15px 5px #8CFF85, 12px -5px 15px 5px #80C7FF, 12px 10px 15px 7px #E488FF, -10px 10px 15px 7px #FF616B, -10px -7px 27px 1px #8E5CFF, 0px 0px 30px 5px rgba(255,113,113,0);
+            /* box-shadow: 12px -5px 15px 5px #80C7FF, 12px 10px 15px 7px #E488FF, -10px -7px 27px 1px #8E5CFF, -14px -2px 15px 6px rgba(222,146,255,0); */
+            transform: scale(1.03);
+            transform: transform 100ms;
+        }
+    }
+
+    .prefijo-respuesta{
+        padding: 2rem 2.5rem;
+        margin-bottom: 0;
+        font-size: calc(16em + 1vw);
+    }
+
+    .respuesta{
+        padding: 2rem;
+        margin-bottom: 0;
+        font-size: calc(16em + 1vw);
+    }
+
+    .correct {
+        background: #7CCF72;
+        box-shadow:0px 0px 20px 6px#7CCF72 !important
+
+    }
+    
+    .incorrect {
+        background: #FF7070;
+        box-shadow:0px 0px 20px 6px #FF616B !important;
+    }
+    
+
+}
+
+// Barra Progreso
+
+.score-contenedor {
+   display: flex;
+   flex-flow: row nowrap;
+  justify-content: space-between;
+  
+  
+  p{
+    font-size: calc(18em + 1vw)
+  }
+
+  h1{
+    font-size: calc(35em + 1.2vw)
+  }
+
+  div:nth-child(2){
+    text-align: right;
+  }
+
+    #barra-contenedor{
+        width: 20rem;
+        height: 3rem;
+        border: 0.2rem solid white;
+        margin-top: 2rem;
+        border-radius: 50px;
+        overflow: hidden;
+    }
+
+    #barra-progreso{
+    
+        height: 4rem;
+        background: linear-gradient(90deg, rgba(255,249,182,1) 0%, rgba(217,252,133,1) 15%, rgba(133,252,194,1) 30%, rgba(133,252,244,1) 43%, rgba(133,206,252,1) 55%, rgba(162,133,252,1) 65%, rgba(222,133,252,1) 75%, rgba(252,133,188,1) 84%);
+    }
+
+}
+
+
+
+
+
+
