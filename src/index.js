@@ -165,7 +165,7 @@ const inicio = () => {
     <svg  viewBox="0 0 600 200">
       <!-- Symbol-->
       <symbol id="s-text">
-        <text text-anchor="middle" x="50%" y="50%" dy=".35em">Trivia fun</text>
+        <text text-anchor="middle" x="50%" y="50%" dy=".35em">DevTrivia</text>
       </symbol>
       <!-- Duplicate symbols-->
       <use class="text" xlink:href="#s-text"></use>
