@@ -72,6 +72,8 @@ let btnFormulario = crearBtn("input", "submit", "Enviar", "btnFormulario");
 btnFormulario.className = "button";
 let btnNuevoJuego = crearBtn("input", "submit", "Nuevo Juego", "nuevo juego");
 btnNuevoJuego.className = "button";
+let btnInicio = crearBtn("input", "submit", "Inicio", "Inicio");
+btnInicio.className = "button";
 
 // <---- Obtener valores de formulario ---->
 const obtenerValores = () => {
@@ -124,27 +126,24 @@ export const nuevoJuego1 = () => {
     crearOpciones(tipo, "tipo");
     crearOpciones(categoria, "categoria");
   }
-  console.log("hola", nombreJugador);
 };
 
 // <---- Bienvenida ---->
 
 const bienvenidoJugador = () => {
   let btnRegresar = crearBtn("input", "submit", "Regresar", "btn-regresar");
-  btnRegresar.addEventListener("click", inicio);
+  btnRegresar.addEventListener("click", inicio2);
   btnRegresar.className = "button";
-  if (nombreJugador.length === 0) {
-    console.log("hoola");
+  if (nombreJugador.length === 0 && nombreJugador === "") {
     divPrincipal.innerHTML = "<p>Por favor escribe un nombre</p> ";
     divPrincipal.appendChild(btnRegresar);
   }
 };
 
-btnEnviar.addEventListener("click", nuevoJuego1);
+// Inicio de Juego 2
 
-// Inicio de Juego
-
-const inicio = () => {
+const inicio2 = () => {
+  nombreInput.value = "";
   contenedorPrincipal.style.display = "none";
   contenedorSinOpciones.style.display = "none";
   // contenedor.removeChild(contenedorPrincipal);
@@ -152,6 +151,31 @@ const inicio = () => {
   divPrincipal.innerHTML = `<h1>Bienvenido</h1>  <p>Por favor indica tu nombre</p>`;
   divPrincipal.appendChild(nombreInput);
   divPrincipal.appendChild(btnEnviar);
+};
+
+btnEnviar.addEventListener("click", nuevoJuego1);
+btnInicio.addEventListener("click", inicio2);
+// Inicio de Juego
+
+const inicio = () => {
+  contenedorPrincipal.style.display = "none";
+  contenedorSinOpciones.style.display = "none";
+  // contenedor.removeChild(contenedorPrincipal);
+  divPrincipal.innerHTML = `
+    <svg  viewBox="0 0 600 200">
+      <!-- Symbol-->
+      <symbol id="s-text">
+        <text text-anchor="middle" x="50%" y="50%" dy=".35em">Trivia fun</text>
+      </symbol>
+      <!-- Duplicate symbols-->
+      <use class="text" xlink:href="#s-text"></use>
+      <use class="text" xlink:href="#s-text"></use>
+      <use class="text" xlink:href="#s-text"></use>
+      <use class="text" xlink:href="#s-text"></use>
+      <use class="text" xlink:href="#s-text"></use>
+    </svg>
+  `;
+  divPrincipal.appendChild(btnInicio);
 };
 
 export const final = (score) => {
@@ -163,7 +187,7 @@ export const final = (score) => {
   divPrincipal.appendChild(tuScore);
   divPrincipal.appendChild(btnNuevoJuego);
 
-  btnNuevoJuego.addEventListener("click", nuevoJuego1);
+  btnNuevoJuego.addEventListener("click", inicio);
 };
 
 inicio();

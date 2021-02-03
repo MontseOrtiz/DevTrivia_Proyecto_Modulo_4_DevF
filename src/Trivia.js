@@ -73,7 +73,6 @@ class Trivia {
 
   hacerPeticion() {
     let url = `${this.urlBase}&category=${this.categoria}&difficulty=${this.dificultad}&type=${this.tipo}`;
-    console.log(url);
     axios
       .get(url)
       .then((res) => {
@@ -108,7 +107,6 @@ class Trivia {
   mostrarPregunta(index) {
     // let nuevaFuncion = ;
     if (index === 10) {
-      console.log(score);
       contenedorPrincipal.style.display = "none";
       return archivo.final(score);
     }

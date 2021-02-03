@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nova+Square&display=swap');
 
+
 $font-stack:'Nova Square', cursive;
+$font-title:'Montserrat', sans-serif;
 $black: #000000;
 $cultured: #e9ecefff;
 $baby-blue-eyes: #a2d2ffff;
@@ -10,13 +13,14 @@ $nadeshiko-pink: #ffafccff;
 $orchid-pink: #ffc8ddff;
 $pink-lavender: #e0b4e6ff;
 $pink-lavender-2: #e2bae6ff;
+$purple: rgb(196, 30, 211);
 $light-coral: #f69897ff;
 $light-pink: #ffadadff;
 $tea-green: #caffbfff;
 $white:white;
 
 // colores que si utilizare
-$hot-pink:#FF5C98;
+$hot-pink:#f55891;
 $white:white;
 
 
@@ -64,7 +68,6 @@ $white:white;
     font-family: 'Nova Square', cursive;
 }
 
-
 body{
     background-color: $black;
 }
@@ -85,6 +88,65 @@ p{
 }
 
 
+// titulo 
+$colors: $nadeshiko-pink, $baby-blue-eyes , $hot-pink, $pink-lavender-2 , $purple;
+$max: length($colors);
+$dash: 70; //tamaño de linea
+$dash-gap: 10; //espacio entre lineas
+$dash-space: $dash * ($max - 1) + $dash-gap * $max;
+$time: 6s;
+$time-step: $time/$max;
+
+.text {
+  fill: none;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-dasharray: $dash $dash-space;
+  stroke-dashoffset: 0;
+  -webkit-animation: stroke $time infinite linear;
+  animation: stroke $time infinite linear;
+  
+  @for $item from 1 through $max {
+    &:nth-child(#{$max}n + #{$item}) {
+      $color: nth($colors, $item);
+      stroke: $color;
+      -webkit-animation-delay: -($time-step * $item);
+      animation-delay: -($time-step * $item);
+    }
+  }
+}
+
+@-webkit-keyframes stroke {
+  100% {
+    stroke-dashoffset: -($dash + $dash-gap) * $max;
+  }
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: -($dash + $dash-gap) * $max;
+  }
+}
+
+
+.titulo-svg {
+  background-size: .2em 100%;
+
+  font-size:calc(50rem + 4vw) !important;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+//   height: 100%;
+}
+
+svg {
+  width: 100%;
+//   height: 100%;
+font-family: 'Montserrat', sans-serif!important;
+  font-size:calc(40rem + 4vw) !important;
+}
+
 
 .container{
     @extend %flex-column;
@@ -98,8 +160,6 @@ p{
 .container-bienvenida, .container-trivia, .container-sin-opciones{
     @extend %flex-column;
     @extend %flex-center;
-    // background-color: $orchid-pink;
-    // background-color: $black;
     color: $white;
     width: 80%;
     height: 80%;
@@ -108,17 +168,17 @@ p{
 }
 
 .button{
-    // font-family: $font-stack;
     font-size: 2.4rem;
     padding: 2rem 0;
     width: 22%;
     text-align: center;
     margin:  1rem 0;
     text-decoration: none;
-    color: rgb(28, 26, 26);
+    color: $white;
     background: $hot-pink;
     border-radius: 4px;
     border-color: $hot-pink;
+    outline: none;
 }
 
 
@@ -153,7 +213,7 @@ input::placeholder {
 }
 
 
-//Menu opciones de trivia
+// Menu opciones de trivia
 .container-select-trivia{
     @extend %flex-row;
     @extend %justify-space-evenly;
@@ -244,7 +304,7 @@ input::placeholder {
 
 }
 
-//Barra Progreso
+// Barra Progreso
 
 .score-contenedor {
    display: flex;
@@ -280,6 +340,7 @@ input::placeholder {
     }
 
 }
+
 
 
 
